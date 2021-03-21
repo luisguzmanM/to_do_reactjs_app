@@ -1,23 +1,52 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import Header from './components/Header';
+import Form from './components/Form';
+import TasksList from './components/TasksList';
 import './App.css';
 
 function App() {
+
+  // GET SAVED TASKS
+  const storedData = localStorage.getItem('myTasks') ? 
+  JSON.parse(localStorage.getItem('myTasks')) : [];
+
+  let configShowComplete = '';
+
+  if(localStorage.getItem('showComplete') === null){
+    configShowComplete = true;
+  } else {
+    configShowComplete = localStorage.getItem('showComplete') === 'true';
+  }
+
+  const[tasks, changeTasks] = useState(storedData);
+  const [showComplete, changeShowComplete] = useState(configShowComplete);
+
+  // SAVE STATE IN LOCALSTORAGE
+  useEffect(() => {
+    localStorage.setItem('myTasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  // SAVE STATE OF SHOW COMPLETE TASKS
+  useEffect(() => {
+    localStorage.setItem('showComplete', showComplete.toString());
+  }, [showComplete]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="contenedor">
+
+      <Header 
+        showComplete={showComplete} 
+        changeShowComplete={changeShowComplete} 
+      /> 
+
+      <Form tasks={tasks} changeTasks={changeTasks} />
+
+      <TasksList 
+        tasks={tasks} 
+        changeTasks={changeTasks}
+        showComplete={showComplete}
+      />
+      
     </div>
   );
 }

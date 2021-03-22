@@ -64,7 +64,7 @@ const TasksList = ({tasks, changeTasks, showComplete}) => {
         })
         : <div 
             className="lista-tareas__mensaje">  
-            ~ There are tasks added ~ 
+            ~ There are no tasks added ~ 
           </div>
       }
     </ul>
